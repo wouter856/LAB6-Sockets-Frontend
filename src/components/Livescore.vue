@@ -1,52 +1,62 @@
 <script setup>
-    import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-    const teamScores = ref([]);
-    //create a random array of score for the teams Terdoencke Boenke, Dremmel UTD, Zapato, TikTak, 2K
-    const team1 = ref(Math.floor(Math.random() * 10));
-    const team2 = ref(Math.floor(Math.random() * 10));
-    const team3 = ref(Math.floor(Math.random() * 10));
-    const team4 = ref(Math.floor(Math.random() * 10));
-    const team5 = ref(Math.floor(Math.random() * 10));
-    //put them in teamscores array
-    teamScores.value.push({ id: 1, label: "Terdoencke Boenke", score: team1.value });
-    teamScores.value.push({ id: 2, label: "Dremmel UTD", score: team2.value });
-    teamScores.value.push({ id: 3, label: "Zapato", score: team3.value });
-    teamScores.value.push({ id: 4, label: "TikTak", score: team4.value });
-    teamScores.value.push({ id: 5, label: "2K", score: team5.value });
+const teamScores = ref([]);
+const teams = [
+  { id: 1, label: 'Terdoencke Boenke', score: 0 },
+  { id: 2, label: 'Dremmel UTD', score: 0 },
+  { id: 3, label: 'Zapato', score: 0 },
+  { id: 4, label: 'TikTak', score: 0 },
+  { id: 5, label: '2K', score: 0 },
+];
 
+// Update the scores randomly
+teams.forEach((team) => {
+  team.score = Math.floor(Math.random() * 10);
+});
+
+// Sort teams by score in descending order
+teams.sort((a, b) => b.score - a.score);
+
+// Populate the teamScores ref with the sorted teams
+teamScores.value = teams;
 </script>
 
 <template>
   <div>
     <header>
-        <h1>Livescore.com</h1>
-        <h2>Check you're scores live</h2>
+      <h1>Livescore.com</h1>
+      <h2>Check your scores live</h2>
     </header>
     <main>
-        <h2>Team Scores:</h2>
-        <tr v-for="team in teamScores">
-            <td>{{ team.label }}: </td>
-            <td>{{ team.score }}</td>
+      <h2>Team Scores:</h2>
+      <table>
+        <tr v-for="team in teamScores" :key="team.id">
+          <td>{{ team.label }}:</td>
+          <td>{{ team.score }}</td>
         </tr>
-        <a href="/">Change My Score</a>
+      </table>
+      <a href="/">Change My Score</a>
     </main>
   </div>
 </template>
 
 <style scoped>
+table {
+    width: 40%;
+    background-color: #318ce7;
+    padding: 1% 2%;
+    border-radius: 20px;
+}
 tr {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
+    margin-top: 8px;
     color: whitesmoke;
     font-size: 18px;
     font-family: Arial, Helvetica, sans-serif;
-    width: 20%;
-    background-color: #318ce7;
-    padding: 1% 2%;
-    border-radius: 20px;
+    border-bottom: 2px solid whitesmoke;
 }
 td {
     font-size: 24px;
