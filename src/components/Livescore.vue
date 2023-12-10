@@ -25,15 +25,31 @@
     </header>
     <main>
         <h2>Team Scores:</h2>
-        <ul>
-        <li v-for="team in teamScores" :key="team.id">
-            {{ team.label }}: {{ team.score }}
-        </li>
-        </ul>
+        <tr v-for="team in teamScores">
+            <td>{{ team.label }}: </td>
+            <td>{{ team.score }}</td>
+        </tr>
+        <a href="/">Change My Score</a>
     </main>
   </div>
 </template>
 
 <style scoped>
-    
+tr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    color: whitesmoke;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 20%;
+    background-color: #318ce7;
+    padding: 1% 2%;
+    border-radius: 20px;
+}
+td {
+    font-size: 24px;
+    font-weight: 700;
+}
 </style>

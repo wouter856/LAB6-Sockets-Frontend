@@ -93,14 +93,4 @@ button:hover {
     font-weight: 700;
     cursor: pointer;
 }
-a {
-    color: whitesmoke;
-    font-size: 18px;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-top: 2rem;
-}
-a:hover {
-    color: #318ce7;
-    cursor: pointer;
-}
 </style>
