@@ -1,25 +1,58 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+    import { ref, onMounted } from 'vue';
 
-const teamScores = ref([]);
-const teams = [
-  { id: 1, label: 'Terdoencke Boenke', score: 0 },
-  { id: 2, label: 'Dremmel UTD', score: 0 },
-  { id: 3, label: 'Zapato', score: 0 },
-  { id: 4, label: 'TikTak', score: 0 },
-  { id: 5, label: '2K', score: 0 },
-];
+    let teamScores = ref([
+    {
+        team: 'Terdoencke Boenke',
+        score: 8,
+    },
+    {
+        team: 'Dremmel UTD',
+        score: 7,
+    },
+    {
+        team: 'Zapato',
+        score: 6,
+    },
+    {
+        team: 'TikTak',
+        score: 5,
+    },
+    {
+        team: '2K',
+        score: 4,
+    },
+    ]);
 
-// Update the scores randomly
-teams.forEach((team) => {
-  team.score = Math.floor(Math.random() * 10);
-});
+    let socket = null;
 
-// Sort teams by score in descending order
-teams.sort((a, b) => b.score - a.score);
+    onMounted(() => {
+    socket = new WebSocket('wss://lab-6-sockets-backend.vercel.app/primus');
 
-// Populate the teamScores ref with the sorted teams
-teamScores.value = teams;
+    // Listen for new data
+    socket.onmessage = function (event) {
+        let m = JSON.parse(event.data);
+        console.log(m);
+        if (m.action === 'updateStats') {
+        // Find the team in teamScores
+        const existingTeam = teamScores.value.find((team) => team.team === m.team);
+
+        if (existingTeam) {
+            // Update the score of the existing team
+            existingTeam.score = m.score;
+        } else {
+            // Team not found, add a new entry to teamScores
+            teamScores.value.push({
+            team: m.team,
+            score: m.score,
+            });
+        }
+
+        // Sort teamScores by score in descending order
+        teamScores.value.sort((a, b) => b.score - a.score);
+        }
+    };
+    });
 </script>
 
 <template>
@@ -32,7 +65,7 @@ teamScores.value = teams;
       <h2>Team Scores:</h2>
       <table>
         <tr v-for="team in teamScores" :key="team.id">
-          <td>{{ team.label }}:</td>
+          <td>{{ team.team }}:</td>
           <td>{{ team.score }}</td>
         </tr>
       </table>

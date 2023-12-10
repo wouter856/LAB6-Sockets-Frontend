@@ -1,6 +1,25 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, reactive, onMounted } from 'vue';
 
+    let teams = reactive(["Terdoencke Boenke", "Dremmel UTD", "Zapato", "TikTak", "2K"]);
+    let selectedTeam = ref(null);
+    let score = ref(null);
+
+    let socket = null;
+
+    onMounted(() => {
+        socket = new WebSocket('wss://lab-6-sockets-backend.vercel.app/primus');
+    });
+
+    const updateStats = () => {
+        let m = {
+            "action": "updateStats",
+            "team": selectedTeam.value,
+            "score": score.value
+        };
+
+        socket.send(JSON.stringify(m));
+    };
 </script>
 
 <template>
@@ -13,12 +32,8 @@
         <form @submit.prevent="submitForm">
             <div class="formField">
                 <label for="team">Select Your Team:</label>
-                <select v-model="selectedTeam" id="team" name="team">
-                    <option value="team1">Terdoencke Boenke</option>
-                    <option value="team2">Dremmel UTD</option>
-                    <option value="team3">Zapato</option>
-                    <option value="team4">TikTak</option>
-                    <option value="team5">2K</option>
+                <select v-model="selectedTeam" id="teamSelect">
+                    <option v-for="team in teams" :key="team" :value="team">{{ team }}</option>
                 </select>
             </div>
             <br />
@@ -27,7 +42,7 @@
                 <input v-model="score" type="number" id="score" name="score" />
             </div>
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit" @click="updateStats">Submit</button>
         </form>
         <a href="/live">Check out the live scores</a>
     </main>
