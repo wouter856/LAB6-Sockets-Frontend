@@ -5,7 +5,7 @@
 
 <template>
   <div>
-    <h1>Livescore</h1>
+    <h1>Updatescore</h1>
   </div>
 </template>
 
